@@ -6,12 +6,73 @@
     <title>Vishal Personal Portfolio Website</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/8c804a3a26.js" crossorigin="anonymous"></script>
+
+    <!-- Firebase SDKs and Realtime Database setup -->
+    <script type="module">
+        // Import the functions needed from Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, push, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlQWzmbLFusvC6bZ1H8F6RD7y4ofZwLRs",
+            authDomain: "my-portfolio-f6955.firebaseapp.com",
+            databaseURL: "https://my-portfolio-f6955-default-rtdb.firebaseio.com",
+            projectId: "my-portfolio-f6955",
+            storageBucket: "my-portfolio-f6955.appspot.com",
+            messagingSenderId: "178045039380",
+            appId: "1:178045039380:web:277ef312040d73150d4801",
+            measurementId: "G-0Y2FVBWJJN"
+        };
+      
+        // Initialize Firebase and Realtime Database
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Form submission logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("contact-form");
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                
+                const name = e.target.Name.value;
+                const email = e.target.Email.value;
+                const message = e.target.Message.value;
+                const msgElement = document.getElementById("msg");
+
+                try {
+                    // Reference to the contacts collection in Realtime Database
+                    const contactsRef = ref(database, "contacts");
+                    const newContactRef = push(contactsRef);
+                    
+                    // Set data in the new contact entry
+                    await set(newContactRef, {
+                        name: name,
+                        email: email,
+                        message: message,
+                        timestamp: serverTimestamp() // Optional: add a timestamp
+                    });
+
+                    msgElement.innerText = "Form submitted successfully!";
+                    form.reset(); // Clear the form fields
+                } catch (error) {
+                    console.error("Error writing to database: ", error);
+                    msgElement.innerText = "Error submitting form.";
+                }
+
+                // Clear the message after a few seconds
+                setTimeout(() => {
+                    msgElement.innerText = "";
+                }, 5000);
+            });
+        });
+    </script>
 </head>
 <body>
     <div id="header">
         <div class="container">
             <nav>
-                <img src="Images/mylogo.png"     class="logo">
+                <img src="Images/mylogo.png" class="logo">
                 <ul id="sidemenu">
                     <li><a href="#header">Home</a></li>
                     <li><a href="#about">About</a></li>
@@ -29,7 +90,7 @@
         </div>
     </div>
 
-    <!--About Section-->
+    <!-- About Section -->
     <div id="about">
         <div class="container">
             <div class="row">
@@ -38,13 +99,7 @@
                 </div>
                 <div class="about-col-2">
                     <h1 class="sub-title">About Me</h1>
-                    <p>
-                        Hi, This is Vishal Rathod I'm from Maharashtra,India.
-                        Currently I'm pursuing my diploma in Computer Engineering at Government
-                        Polytechnic Chhatrapati Sambhajinagar.
-                        Here I have developed and enhanced my skills in programming as well in website 
-                        and app designing.
-                    </p>
+                    <p>Hi, This is Vishal Rathod. I'm from Maharashtra, India, currently pursuing a diploma in Computer Engineering at Government Polytechnic Chhatrapati Sambhajinagar.</p>
                     <div class="tab-titles">
                         <p class="tab-links active-link" onclick="opentab('skills')">Skills</p>
                         <p class="tab-links" onclick="opentab('experience')">Experience</p>
@@ -55,29 +110,26 @@
                             <li><span>UI/UX</span><br>Designing Web/App Interfaces</li>
                             <li><span>Web Development</span><br>Web app Development</li>
                             <li><span>App Development</span><br>Building Android apps</li>
-                            
                         </ul>
                     </div>
                     <div class="tab-contents" id="experience">
                         <ul>
                             <li><span>Internship Program</span><br>Android Development</li>
                             <li><span>Fresher</span></li>
-                            
                         </ul>
                     </div>
                     <div class="tab-contents" id="education">
                         <ul>
                             <li><span>2022</span><br>Primary Education from CSM High-School</li>
                             <li><span>2025</span><br>Diploma from GP Chh.Sambhajinagar</li>
-                                                      
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<!-------------services------------------->
 
+    <!-- Services Section -->
     <div id="services">
         <div class="container">
             <h1 class="sub-title">My Services</h1>
@@ -85,29 +137,26 @@
                 <div>
                     <i class="fa-solid fa-code"></i>
                     <h2>Web Design</h2>
-                    <p>Here you get an amazing static and dynamic responsive websites</p>
+                    <p>Get amazing static and dynamic responsive websites.</p>
                     <a href="#">Learn more</a>
                 </div>
-                
                 <div>
                     <i class="fa-solid fa-crop"></i>
                     <h2>UI/UX Design</h2>
-                    <p> Here you will get different types of attractive web and app interfaces.</p>
+                    <p>Attractive web and app interfaces.</p>
                     <a href="#">Learn more</a>
                 </div>
-
                 <div>
                     <i class="fa-brands fa-app-store"></i>
                     <h2>App Design</h2>
-                    <p>Here you will get Android apps that meets to your exact need.</p>
+                    <p>Customized Android apps to meet your needs.</p>
                     <a href="#">Learn more</a>
                 </div>
-
             </div>
-
         </div>
     </div>
-    <!-- ---------------portfolio---------- -->
+
+    <!-- Portfolio Section -->
     <div id="portfolio">
         <div class="container">
             <h1 class="sub-title">My Work</h1>
@@ -116,7 +165,7 @@
                     <img src="Images/work-1.png">
                     <div class="layer">
                         <h3>Chat Bot</h3>
-                        <p>This is a typical Bot which helps to in your work.</p>
+                        <p>This is a Bot that helps in your work.</p>
                         <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
                 </div>
@@ -124,7 +173,7 @@
                     <img src="Images/work-2.png">
                     <div class="layer">
                         <h3>Music App</h3>
-                        <p>It serves millions of songs to you. Access it from play store.</p>
+                        <p>Access millions of songs from the play store.</p>
                         <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
                 </div>
@@ -132,17 +181,16 @@
                     <img src="Images/work-3.png">
                     <div class="layer">
                         <h3>Online Shopping App</h3>
-                        <p>You can buy the any products in affordable price. Access it from play store.</p>
+                        <p>Affordable products available on the play store.</p>
                         <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
                 </div>
             </div>
             <a href="#" class="btn">See more</a>
-
         </div>
     </div>
-    <!-- ------------------contact------------------ -->
 
+    <!-- Contact Section -->
     <div id="contact">
         <div class="container">
             <div class="row">
@@ -153,13 +201,13 @@
                     <div class="social-icons">
                         <a href="https://www.linkedin.com/in/vishal-rathod-co2006"><i class="fa-brands fa-linkedin"></i></a>
                         <a href="https://Wa.me/+918263897692"><i class="fa-brands fa-square-whatsapp"></i></a>
-                        <a href=""><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
                         <a href="https://t.me/vishalrathodofficial"><i class="fa-brands fa-telegram"></i></a>
                     </div>
                     <a href="Images/Vishal R. Rathod Resume(CV).pdf" download class="btn btn2">Download CV</a>
                 </div>
                 <div class="contact-right">
-                    <form name="submit-to-google-sheet">
+                    <form id="contact-form">
                         <input type="text" name="Name" placeholder="Your Name" required>
                         <input type="email" name="Email" placeholder="Your Email" required>
                         <textarea name="Message" rows="6" placeholder="Your Message"></textarea>
@@ -174,51 +222,17 @@
         </div>
     </div>
 
-    <script>
-        var tablinks = document.getElementsByClassName("tab-links");
-        var tabcontents = document.getElementsByClassName("tab-contents");
+   
 
-        function opentab(tabname){
-            for(tablink of tablinks){
-                tablink.classList.remove("active-link")
-            }
-            for(tabcontent of tabcontents){
-                tabcontent.classList.remove("active-tab")
-            }
-            event.currentTarget.classList.add("active-link")
-            document.getElementById(tabname).classList.add("active-tab")
+    <!-- Javascript for Sidemenu -->
+    <script>
+        var sidemenu = document.getElementById("sidemenu");
+        function openmenu() {
+            sidemenu.style.right = "0";
+        }
+        function closemenu() {
+            sidemenu.style.right = "-250px";
         }
     </script>
-
-    <script>
-        var smenu = document.getElementById("sidemenu");
-        
-        function openmenu(){
-            smenu.style.right = "0";
-        }
-        function closemenu(){
-            smenu.style.right = "-200px";
-        }
-
-    </script>
-
-<script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzxUT2LsNd0Pcl6vef1beS1YrC2e_rccpsCcqnUW4ZanrAup0lY0QtAu8HdsHbZK1TcOw/exec'
-    const form = document.forms['submit-to-google-sheet']
-    const msg = document.getElementById("msg")
-    form.addEventListener('submit', e => {
-      e.preventDefault()
-      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-        .then(response => {
-            msg.innerHTML = "Message sent successfully..."
-            setTimeout(function(){
-                msg.innerHTML = ""
-            },5000)
-            form.reset()
-        })
-        .catch(error => console.error('Error!', error.message))
-    })
-  </script>
-
 </body>
 </html>
